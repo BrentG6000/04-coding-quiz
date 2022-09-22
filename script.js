@@ -7,24 +7,28 @@ var thirdButtonEl = document.createElement("button");
 var fourthButtonEl = document.createElement("button");
 
 var answerButtons = [firstButtonEl, secondButtonEl, thirdButtonEl, fourthButtonEl];
-
+var i = 0;
+var quizDone = false;
 var questions = ["question1", "question2"];
 var answers = ["answer1", "answer2"];
 
-var buttonChoices = [["A", "B", "C", "D"], ["E", "F", "G", "H"]];
+var buttonChoices = [["A", "answer1", "C", "D"], ["E", "F", "answer2", "H"]];
 var timerCount = 99;
 
 function startQuiz() {
     timerEl.textContent = 100;
     startButton.disabled = true;
     startcountDown();
-    presentQuestions();
+    presentQuestion();
 }
 
 function startcountDown() {
     var timer = setInterval(() => {
         timerEl.textContent = timerCount;
-        if (timerCount > 0) {
+        if (quizDone === true) {
+            timerEl.textContent = timerCount;
+        }
+        else if (timerCount > 0) {
             timerCount--;
         }
         else {
@@ -33,16 +37,59 @@ function startcountDown() {
     }, 1000);
 }
 
-function presentQuestions() {
-    questionEl.textContent = questions[0];
+function presentQuestion() {
+    questionEl.textContent = questions[i];
     
-    for (var i = 0; i < answerButtons.length; i++) {
-        answerButtons[i].textContent = buttonChoices[0][i]
+    for (var j = 0; j < answerButtons.length; j++) {
+        answerButtons[j].textContent = buttonChoices[i][j]
     }
    
-    for (var i = 0; i < answerButtons.length; i++){
-        questionEl.appendChild(answerButtons[i]);
+    for (var k = 0; k < answerButtons.length; k++){
+        questionEl.appendChild(answerButtons[k]);
     }
 }
 
+function endOfQuiz() {
+    quizDone = true;
+    alert("Quiz is over.");
+}
+
+function answerClick(event) {
+    //event.preventDefault()
+    var userAnswer = event.target.textContent;
+    console.log(userAnswer);
+    console.log(answers[i]);
+    
+    if (userAnswer === answers[i]) {
+        console.log("Correct");
+    }
+    else {
+        console.log("incorrect");
+        if (i + 1 < questions.length && timerCount >= 10) { 
+            timerCount -= 10;
+            presentQuestion();
+        }
+        else if (i + 1 >= questions.length) {
+            endOfQuiz();
+        }
+        else {
+            timerCount = 0;
+            endOfQuiz();
+        }
+    }
+    
+    i++
+
+    // if (i < questions.length) {
+    //     presentQuestion();
+    // }
+    // else {
+    //     timerEl.textContent = timerCount;
+    //     endOfQuiz();
+    // }
+}
+
+
+
 startButton.addEventListener("click", startQuiz);
+questionEl.addEventListener("click", answerClick);
