@@ -8,18 +8,20 @@ var fourthButtonEl = document.createElement("button");
 
 var answerButtons = [firstButtonEl, secondButtonEl, thirdButtonEl, fourthButtonEl];
 var i = 0;
+var score = 0;
 var quizDone = false;
 var questions = ["question1", "question2"];
 var answers = ["answer1", "answer2"];
 
 var buttonChoices = [["A", "answer1", "C", "D"], ["E", "F", "answer2", "H"]];
-var timerCount = 99;
+var timerCount = 29;
 
 function startQuiz() {
-    timerEl.textContent = 100;
+    timerEl.textContent = timerCount + 1;
     startButton.disabled = true;
-    startcountDown();
+    
     presentQuestion();
+    startcountDown();
 }
 
 function startcountDown() {
@@ -28,13 +30,17 @@ function startcountDown() {
         if (quizDone === true) {
             timerEl.textContent = timerCount;
         }
-        else if (timerCount > 0) {
+        else if (timerCount >= 0) {
             timerCount--;
         }
         else {
+            timerEl.textContent = 0;
+            endOfQuiz();
             clearInterval(timer);
+            
         }
     }, 1000);
+   
 }
 
 function presentQuestion() {
@@ -51,7 +57,8 @@ function presentQuestion() {
 
 function endOfQuiz() {
     quizDone = true;
-    alert("Quiz is over.");
+    percentRight = score / questions.length * 100;
+    alert("Quiz is over. You got " + percentRight + "% of the questions right.");
 }
 
 function answerClick(event) {
@@ -61,32 +68,28 @@ function answerClick(event) {
     console.log(answers[i]);
     
     if (userAnswer === answers[i]) {
-        console.log("Correct");
+        console.log("correct");
+        score++;
+        if (i + 1 < questions.length) {
+            i++;
+            presentQuestion();
+        }
+        else {
+            endOfQuiz();
+        }
     }
     else {
         console.log("incorrect");
-        if (i + 1 < questions.length && timerCount >= 10) { 
+        if (i + 1 < questions.length && timerCount > 10) { 
             timerCount -= 10;
+            i++;
             presentQuestion();
-        }
-        else if (i + 1 >= questions.length) {
-            endOfQuiz();
         }
         else {
             timerCount = 0;
             endOfQuiz();
         }
     }
-    
-    i++
-
-    // if (i < questions.length) {
-    //     presentQuestion();
-    // }
-    // else {
-    //     timerEl.textContent = timerCount;
-    //     endOfQuiz();
-    // }
 }
 
 
