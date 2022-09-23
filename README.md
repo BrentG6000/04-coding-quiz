@@ -12,7 +12,8 @@ To use this app, simply launch the web page from a browser either locally using 
 Click the start button to begin the quiz and click one of the answer buttons given for each question. You will be given your score at the end of the quiz and
 will have the option to store your score in the browser.
  
-![alt screenshot](assets/images/screenshot.png)
+
+![alt screenshot](/assests/images/screenshot.png)
 
 
 ## License
